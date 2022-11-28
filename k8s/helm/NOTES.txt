@@ -1,0 +1,7 @@
+helm template '.' --output-dir '.yamls'
+
+helm upgrade weather . --dry-run --debug --install
+
+helm upgrade weather . --install
+
+helm delete weather

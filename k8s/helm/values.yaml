@@ -1,0 +1,6 @@
+PrivateContainerRegistry: "localhost:5001/"
+BackendServicePort: 5050
+FrontendServicePort: 5051
+PostgresPort: 5432
+PostgresUserId: "postgres"
+PostgresPassword: "pass@word1"

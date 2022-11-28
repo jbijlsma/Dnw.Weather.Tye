@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: frontend
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/part-of: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: frontend
+          image: {{ .Values.PrivateContainerRegistry }}{{ .Release.Name }}-frontend:latest
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://*:5050
+            - name: ASPNETCORE_ENVIRONMENT
+              value: 'Production'
+            - name: SERVICE__BACKEND__HOST
+              value: 'backend'
+            - name: SERVICE__BACKEND__PORT
+              value: '{{ .Values.BackendServicePort }}'
+          ports:
+            - containerPort: 5050
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+spec:
+  selector:
+    app.kubernetes.io/name: frontend
+  type: ClusterIP
+  ports:
+    - name: web
+      protocol: TCP
+      port: {{ .Values.FrontendServicePort }}
+      targetPort: 5050

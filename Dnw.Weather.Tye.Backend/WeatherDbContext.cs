@@ -31,7 +31,7 @@ public class WeatherDbContext : DbContext
     {
         var cn = _configuration.GetConnectionString("postgres");
         Console.WriteLine(cn);
-        options.UseNpgsql(cn);
+        options.UseNpgsql(cn!);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
